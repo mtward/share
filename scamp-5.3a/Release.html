@@ -1,0 +1,1139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta name="generator"
+          content="PSPad editor, www.pspad.com">
+    <meta name="description"
+          content="Scamp HTML Readme">
+    <meta http-equiv="Content-Type"
+          content="text/html; charset=iso-8859-1">
+    <meta name="author"
+          content="Gerard Seibert">
+    <title>
+      README
+    </title>
+    <style type="text/css">
+<!--
+
+    body { text-align:left; font-family:Georgia,'Bookman Old Style',Garamond,'Times New Roman',serif;
+    margin: 5px;
+    padding: 1em;}
+
+    pre {  font-family:'Courier New','Lucida Console','Andale Mono',monospace;}
+
+
+    TABLE {
+    border: 2px solid #800080;
+    width: auto;
+    margin: auto;
+    }
+
+    TH {
+    padding: 5px;
+    font-size:large; font-size:medium;
+    color:#FF0000;
+    font-family:Georgia,'Bookman Old Style',Garamond,'Times New Roman',serif;
+    text-align:left;
+    border-style: hidden;
+    }
+
+    THEAD {
+    padding: 5px;
+    text-decoration:underline;
+    font-weight:bold;
+    font-family:'Trebuchet MS',Verdana,Tahoma,Arial,'Arial Black',Helvetica,'Century Gothic','Lucida Sans Unicode',Impact,sans-serif;
+    }
+
+    td {
+    padding: 5px;
+    border-width: medium;
+    border: 1px solid #7fffd4;
+    }
+
+    tfoot {
+    color: blue;
+    }
+
+    .indent {
+    text-indent:6em;
+    }
+
+    .hanging-indent {
+    margin: auto 15%;
+    width: 80%;
+    text-indent: -7em;
+    }
+
+
+    hr {
+    height:5px;
+    width:90%;
+    background:#446791;
+    text-align: center;
+    }
+
+    -->
+    </style>
+  </head>
+  <body>
+    <p class="hanging-indent">
+      IMPORTANT: FreeBSD users who install this program from the
+      ports system should read the &#39;FreeBSD Note&#39; at the
+      end of this document.
+    </p>
+    <hr>
+    <p class="hanging-indent">
+      IMPORTANT: This is a &quot;bash&quot; script. It will
+      probably fail if used under another shell.
+    </p>
+    <p>
+      If this is an update from an earlier version of this script,
+      it is strongly that this script be run with the [-c] command
+      line option to insure it is configured correctly. In additon,
+      any existing configuration files should either be rebuilt
+      using the &quot;-e &lt;name&gt;&quot; option or deleted and
+      recreated.
+    </p>
+    <p>
+      The first time this script is initialised, it will run its
+      basic configuration routine and exit. If you ever want to
+      reconfigure the script, use the [-c] command line option to
+      erase and create a default config file. Use [-C &lt;name&gt;]
+      to create a new config section (after the default is
+      created).
+    </p>
+    <hr>
+    <p>
+      This script was written using &#8249;Bash-4.1.9&#8250;. While
+      it may work correctly with other scripting languages, there
+      is no guarantee that it will.
+    </p>
+    <table summary="Required Files">
+      <tr>
+        <th colspan="2">
+          Required Files:
+        </th>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          Curl or Wget
+        </td>
+        <td>
+          {curl &gt;= 7.21.2 recommended}{wget &gt;= 1.12
+          recommended}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          a. http://curl.haxx.se/<br>
+          b. http://www.gnu.org/software/wget/
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          rsync
+        </td>
+        <td>
+          {Version &gt;= 3.0.7 recommended}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          a. http://samba.anu.edu.au/rsync
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          gnupg
+        </td>
+        <td>
+          {Version &gt;= 2.0.16 recommended}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          a.
+          http://lists.gnupg.org/pipermail/gnupg-announce/2009q1/000287.html<br>
+
+          b. http://www.gnupg.org
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          clamav
+        </td>
+        <td>
+          {Version &gt;= 0.96 recommended}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          a. http://www.clamav.net/
+        </td>
+      </tr>
+    </table>
+    <ol>
+      <li>This script probably has to be run as ROOT or another
+      privileged user who has proper READ/WRITE permissions to the
+      &quot;/etc&quot; directory as well as the Clamav
+      database.<br>
+        <br>
+      </li>
+      <li>This script has an interactive configuration function.
+      You must run it from the console the first time you invoke
+      it. After that, it will work fine from CRON.<br>
+        <br>
+      </li>
+      <li>The [-C] option will create a new configuration for use
+      by the script. Use it from the command line. EXAMPLE:
+      scamp.sh -C<br>
+        <br>
+      </li>
+      <li>The [-e] option will edit an existing config file. The
+      file must be stated on the command line: scamp.sh -e
+      &lt;filename&gt;. Filename is what you want to call the new
+      config file. Use only letters, numbers and underscores. No
+      special characters allowed. If the section does not exist, it
+      will be created. The config-script will ask the same
+      questions as when you first installed the script. When
+      finished, it will exit. To use your new config section, just
+      call it from the command line like you did when you created
+      it. It will use the configuration file named. You should NOT
+      give the confiruration file a &#39;prefix&#39;. It is not
+      required.REMEMBER: The name is case sensitive!<br>
+        <br>
+      </li>
+      <li>The &quot;scamp.sh&quot; file is a BASH script for
+      downloading and installing various Clamav definition files.
+      The script will create a &quot;CONFIGURATION FILE&quot; when
+      first run. The majority of the variables are &#39;hard
+      coded&#39; into the script. The only one that must be entered
+      is the location of the Clamav database. See your
+      &quot;clamd.conf&quot; file for the correct location.<br>
+        <br>
+      </li>
+      <li>Examples are:<br>
+        a. /var/db/clamav<br>
+        b. /var/lib/clamav<br>
+        c. /usr/local/share/clamav<br>
+        <br>
+        <br>
+      </li>
+      <li>You must enter the correct location or else the script
+      will not work. The initialization will only occur the first
+      time the script is run or when invoked by a command line
+      options [-c].<br>
+        <br>
+      </li>
+      <li>**NOTE: 0 = the number zero, not the letter O
+      </li>
+    </ol>
+    <table summary="Scamp Variables">
+      <tr>
+        <th colspan="2">
+          scamp variables - user configurable
+        </th>
+      </tr>
+      <tr>
+        <td>
+          C_GROUP
+        </td>
+        <td>
+          {Clamav database group owner}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          C_PID
+        </td>
+        <td>
+          {Location of the clamd PID file}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          C_USER
+        </td>
+        <td>
+          {Clamav database file owner}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          CLAMAV_DB
+        </td>
+        <td>
+          {Clamav database location}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          CONFIG_DIR
+        </td>
+        <td>
+          {Default location of the script&#39;s config files}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          CONFIG_FILE
+        </td>
+        <td>
+          {FQN of the script&#39;s config file}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_LDB
+        </td>
+        <td>
+          {Install the *.ldb files - 1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_MALWALE
+        </td>
+        <td>
+          {Download Mallware files 1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_MSRBL
+        </td>
+        <td>
+          {Download MSRBL files - 1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_SANE
+        </td>
+        <td>
+          {download the Sanesecurity files - 1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_SECURITE
+        </td>
+        <td>
+          {Download the securiteinfo files - 1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GET_WILLOW
+        </td>
+        <td>
+          {Install the winnow files}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          GNUPGHOME_VAR
+        </td>
+        <td>
+          {If set, will export the GNUPGHOME environmental
+          variable}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          MK_LOG
+        </td>
+        <td>
+          {Create a log file. DEFAULT: /var/log/scamp.log}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          RELOAD
+        </td>
+        <td>
+          {Reload the clamd database after update - 1=yes &amp;
+          0=no }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          REST
+        </td>
+        <td>
+          {Invoke the random delayed download files function -
+          1=yes &amp; 0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          SYS_LOG
+        </td>
+        <td>
+          {Use the system logger}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          T_DIR
+        </td>
+        <td>
+          {tmp directory used by this script}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          W_SUM
+        </td>
+        <td>
+          {Whether to print out a summary screen - 1=yes &amp;
+          0=no}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          WPC
+        </td>
+        <td>
+          {Which winnow file to install}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          *{The random download function only works via CRON}
+        </td>
+      </tr>
+    </table>
+    <p>
+      All of these settings with the exception of the CONFIG_FILE
+      location are available through the setup program. Simply
+      pressing &lt;RETURN&gt; will accept the default value shown.
+    </p>
+    <table summary="Command Line Options">
+      <tr>
+        <th>
+          Command Line Options
+        </th>
+      </tr>
+      <tr>
+        <td>
+          {-c}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Creates a new default config file and exits
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-C &lt;filename&gt;}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Create a new config file section
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-D}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Delete all definition &amp; configuration files
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-e &lt;filename&gt;}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Edit an existing config file
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-h}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Usage screen.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-l}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns off the logging function
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-L}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns on the logging function
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-q}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns off printing of a summary screen (Error messages
+          displayed)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-Q}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns on printing of a summary screen displayed}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-r}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns off the sleep function.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-R}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Turns on the random sleep timer. Between 0 &amp; 9
+          minutes
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {-v}
+        </td>
+        <td>
+          =
+        </td>
+        <td>
+          Displays the script version and exits.
+        </td>
+      </tr>
+    </table>
+    <p>
+      When available, lower case letter will turn an option off,
+      while upper case will activate the function. Presently, only
+      the &#39;log&#39; and &#39;summary screen&#39; and
+      &#39;random download timer&#39; functions are supported. They
+      can be set permanently in the config file.
+    </p>
+    <p>
+      NOTE: &quot;Random Download Timer&quot;<br>
+      The random download function is only useful when the script
+      is run via CRON. It is ignored at other times. The function
+      can be invoked via the command line using [-R]; i.e.,
+      &quot;scamp.sh -R&quot; for instance. You can save the
+      setting permanently in the config file by running the script
+      with the [-c] command line option and then answering the
+      random download question with either 1 or 0 - 0=off &amp;
+      1=on.
+    </p>
+    <table summary="Exit Codes">
+      <tr>
+        <th colspan="2">
+          The following exit code values are available:
+        </th>
+      </tr>
+      <tr>
+        <td>
+          0
+        </td>
+        <td>
+          Success
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1
+        </td>
+        <td>
+          Incorrect flag entered
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2
+        </td>
+        <td>
+          No database specified
+        </td>
+      </tr>
+      <tr>
+        <td>
+          3
+        </td>
+        <td>
+          Unable to create required directory structure
+        </td>
+      </tr>
+      <tr>
+        <td>
+          4
+        </td>
+        <td>
+          Program must be run interactively
+        </td>
+      </tr>
+      <tr>
+        <td>
+          5
+        </td>
+        <td>
+          Unable to locate &quot;which&quot; binary
+        </td>
+      </tr>
+      <tr>
+        <td>
+          6
+        </td>
+        <td>
+          Missing binary: View error message for details
+        </td>
+      </tr>
+      <tr>
+        <td>
+          7
+        </td>
+        <td>
+          Error creating GPG file
+        </td>
+      </tr>
+    </table>
+    <p>
+      INSTALLATION NOTES:<br>
+      <br>
+      1. All of the Sanesecurity files and gpg keys are now keep in
+      the<br>
+      Sanesecurity (sane) directory.<br>
+      <br>
+      2. For the safest and most error free operation, I would
+      recommend<br>
+      cleaning out the clamav database directory of all files and
+      directories<br>
+      not installed by the &#39;freshclam&#39; program itself. This
+      appears to be even<br>
+      more important if you have been running another script to
+      update the<br>
+      clamav database.<br>
+      <br>
+      3. That would probably include all BUT these files:<br>
+      a. daily.cld<br>
+      b. main.cld<br>
+      c. mirrors.dat<br>
+      d. stats.dat<br>
+      <br>
+      4. Any directories should also be deleted.<br>
+      <br>
+      5. Running the script for the first time after cleaning out
+      the clamav<br>
+      database will insure a cleaner install of the new database
+      files. Since<br>
+      it appears that different &#39;scripts&#39; install a
+      radically different<br>
+      configuration of definition files, this would also insure
+      that only the<br>
+      ones installed by this script are made available to Clamav.
+      It would also<br>
+      insure that outdated files are removed.<br>
+      <br>
+      The actual files download and installed by this script
+      include the following.
+    </p>
+    <table summary="Downloaded Files">
+      <tr>
+        <th colspan="2">
+          All of the Sanesecurity files
+        </th>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          junk.ndb
+        </td>
+        <td>
+          General high hitting junk, containing spam
+          phishing/lottery/jobs/419s etc.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          jurlbl.ndb
+        </td>
+        <td>
+          Junk Url based
+        </td>
+      </tr>
+      <tr>
+        <td>
+          jurlbla.ndb Junk Url
+        </td>
+        <td>
+          based autogenerated from various feeds
+        </td>
+      </tr>
+      <tr>
+        <td>
+          lott.ndb
+        </td>
+        <td>
+          Lottery
+        </td>
+      </tr>
+      <tr>
+        <td>
+          phish.ndb
+        </td>
+        <td>
+          Phishing
+        </td>
+      </tr>
+      <tr>
+        <td>
+          rogue.hdb
+        </td>
+        <td>
+          Malware, Rogue anti-virus software and Fake codecs etc.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          sanesecurity.ftm
+        </td>
+        <td>
+          Message file types (REQUIRED for best performance)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          sigwhitelist.ign2
+        </td>
+        <td>
+          Fast update file to whitelist any problem signatures
+          (REQUIRED 0.96rc1+)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          scam.ndb
+        </td>
+        <td>
+          Spam/scams
+        </td>
+      </tr>
+      <tr>
+        <td>
+          spam.ldb
+        </td>
+        <td>
+          Spam detected using the new Logical Signature type
+        </td>
+      </tr>
+      <tr>
+        <td>
+          spamimg.hdb
+        </td>
+        <td>
+          Spam images
+        </td>
+      </tr>
+      <tr>
+        <td>
+          spamattach.hdb
+        </td>
+        <td>
+          Spam Spammed attachments such as pdf&#39;s/docs/rtf/zips
+        </td>
+      </tr>
+      <tr>
+        <td>
+          spear.ndb
+        </td>
+        <td>
+          Spear phishing email addresses
+        </td>
+      </tr>
+      <tr>
+        <td>
+          spearl.ndb
+        </td>
+        <td>
+          Spear phishing urls
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          Sanesecurity *.ldb files
+        </th>
+      </tr>
+      <tr>
+        <td>
+          spam.ldb
+        </td>
+        <td>
+          Spam detected using the new Logical Signature type
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are distributed by Sanecurity,
+          but produced by OITC
+        </th>
+      </tr>
+      <tr>
+        <td>
+          winnow_malware.hdb
+        </td>
+        <td>
+          Current virus, trojan and other malware not yet detected
+          by ClamAV. Undetected virus samples can be sent to
+          virus_samples@oitc.com
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_malware_links.ndb
+        </td>
+        <td>
+          Links to malware
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_spam_complete.ndb
+        </td>
+        <td>
+          Signatures to detect fraud and other malicious spam
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_phish_complete.ndb
+        </td>
+        <td>
+          Phishing and other malicious url&#39;s and compromised
+          hosts
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_phish_complete_url.ndb
+        </td>
+        <td>
+          Similar to winnow_phish_complete.ndb except that entire
+          urls&#39;s are used
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow.complex.patterns.ldb
+        </td>
+        <td>
+          contain hand generated signatures for malware and some
+          egregious fraud
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_extended_malware.hdb
+        </td>
+        <td>
+          contain hand generated signatures for malware.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow_extended_malware_links.ndb
+        </td>
+        <td>
+          contain hand generated signatures for malware links.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          winnow.attachments.hdb
+        </td>
+        <td>
+          Spammed attachments such as pdf&#39;s/docs/rtf/zips
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Note #1: Only use ONE of the above databases,
+          winnow_phish_complete.ndb or
+          winnow_phish_complete_url.ndb<br>
+          Note #2: Please report any problems with winnow sigs to
+          winnow@oitc.com
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are distributed by Sanecurity,
+          but produced by Andrew Lewis
+        </th>
+      </tr>
+      <tr>
+        <td>
+          doppelstern.ndb
+        </td>
+        <td>
+          phishing, scams and other junk
+        </td>
+      </tr>
+      <tr>
+        <td>
+          doppelstern.hdb
+        </td>
+        <td>
+          hashes of spam documents and images
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are produced and distributed by
+          SecuriteInfo
+        </th>
+      </tr>
+      <tr>
+        <td>
+          honeynet.hdb<br>
+          securiteinfobat.hdb<br>
+          securiteinfodos.hdb<br>
+          securiteinfoelf.hdb<br>
+          securiteinfo.hdb<br>
+          securiteinfohtml.hdb<br>
+          securiteinfooffice.hdb<br>
+          securiteinfopdf.hdb<br>
+          securiteinfosh.hdb
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are produced and distributed by
+          msrbl
+        </th>
+      </tr>
+      <tr>
+        <td>
+          MSRBL-SPAM.ndb
+        </td>
+        <td>
+          created from spam emails (URLs or other content) that
+          looks static
+        </td>
+      </tr>
+      <tr>
+        <td>
+          MSRBL-Images.hdb
+        </td>
+        <td>
+          created from images contained within spam emails
+        </td>
+      </tr>
+      <tr>
+        <td>
+          MSRBL-SPAM-CR.ndb
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are produced and distributed by
+          MalwarePatrol
+        </th>
+      </tr>
+      <tr>
+        <td>
+          mbl.ndb
+        </td>
+        <td>
+          URLs containing of Viruses, Trojans, Worms, or Malware
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are distributed by Sanecurity,
+          but produced by Bill Landry (InetMsg)
+        </th>
+      </tr>
+      <tr>
+        <td>
+          INetMsg-SpamDomains-2w.ndb
+        </td>
+        <td>
+          last 2 &#39;weeks&#39; of spam domains found
+        </td>
+      </tr>
+      <tr>
+        <td>
+          INetMsg-SpamDomains-2m.ndb
+        </td>
+        <td>
+          last 2 &#39;months&#39; of spam domains found
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Note: Only use ONE of the above databases,
+          SpamDomains-2w.ndb or SpamDomains-2m.ndb
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          The following databases are distributed by Sanecurity,
+          but produced by Julian Field
+        </th>
+      </tr>
+      <tr>
+        <td>
+          scamnailer.ndb
+        </td>
+        <td>
+          Spear phishing and other phishing emails
+        </td>
+      </tr>
+    </table>
+    <p>
+      This script is easily run via CRON. Something like this is
+      all that you probably need. You should probably include a
+      &quot;MAILTO&quot; in the crontab file. Any errors will be
+      mailed to that address. If not all ready set, or if you do
+      not know how to set it, at the command line enter:
+      &quot;whoami&quot; sans quotes and enter that in the mailto
+      variable.
+    </p>
+    <p>
+      EXAMBLE: Output of &#39;whoami&#39; was steve. Place this in
+      the top of the cron file:
+    </p>
+    <p>
+      &#160;&#160;&#160;MAILTO=steve
+    </p>
+    <p>
+      This would be placed just below the &#39;SHELL&#39; variable.
+      You can get further information at
+      &lt;http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5&gt;
+    </p>
+    <p>
+      # Root&#39;s Crontab file<br>
+      # Use the fully qualified path to bash on your system.<br>
+      # Typing: &quot;which bash&quot; will produce it.<br>
+      # SHELL=/usr/local/bin/bash # For FreeBSD users<br>
+      # SHELL=/usr/bin/bash # Most other operating systems<br>
+      # Enter user below and uncomment<br>
+      # MAILTO=<br>
+      #(m) (h) (mday) (month) (wday) (command) ## Do NOT
+      uncomment<br>
+      <br>
+      # Runs every 4 hours, every day with logging=on, quiet
+      mode=on, random<br>
+      # download timer=on<br>
+      <br>
+      0 */4 * * * /PATH-2-SCRIPT/scamp.sh -L -q -R<br>
+      <br>
+      # Runs every 4 hours, every day using a preconfigured config
+      file name: cron<br>
+      <br>
+      0 */4 * * * /PATH-2-SCRIPT/scamp.sh -C cron
+    </p>
+    <p>
+      EULA:<br>
+      The end user is allowed to make any changes, modifications,
+      or whatever<br>
+      to this script. The author assumes no responsibility for this
+      script,<br>
+      modified or not by the end user. In other words, the user
+      assumes all<br>
+      responsibility for the use of this program. In other words,
+      USE AT YOUR<br>
+      OWN RISK.<br>
+      <br>
+      I can be contacted at: gerard@seibercom.net<br>
+      <br>
+      The latest version of this script can usually be downloaded
+      from:<br>
+      <br>
+      https://sourceforge.net/projects/scamp/<br>
+      <br>
+      Older versions may also be available.<br>
+      <br>
+      Any questions, suggestions, patches, etc. should be directed
+      to me. I<br>
+      really would appreciate it. To make tracking of &#39;bug&#39;
+      reprts easier, please<br>
+      do the following:<br>
+      <br>
+      1) Go to: https://sourceforge.net/projects/scamp/<br>
+      2) Click on &quot;TRACKER&quot;<br>
+      3) Click on &quot;Bug Reports&quot;<br>
+      4) Click on &quot;Add New&quot;<br>
+      5) Fill out the report with complete information including
+      the version of<br>
+      the script you are using, your OS and version of bash, rsync,
+      gpg/gpg2,<br>
+      curl and/or wget and your version of Clamav. If possible,
+      include the<br>
+      complete text of any error messages, etc.<br>
+      <br>
+      Use the same procedure to submit suggestions. Click on
+      &quot;Feature Request&quot;<br>
+      under &quot;TRACKER&quot;<br>
+      <br>
+      FreeBSD Note:<br>
+      <br>
+      When installed via the FreeBSD ports system, a configuration
+      file with<br>
+      the basic defaults for Clamav on a FreeBSD system is
+      installed in the<br>
+      &#39;/usr/local/etc/scamp&#39; directory. It is still
+      strongly recommended that the<br>
+      first time this script is run, it is run as &quot;scamp.sh
+      -c&quot; to insure the<br>
+      file is configured according to the end users
+      preferences.<br>
+      <br>
+      LAST UPDATED: Sun, 19 December 2010 11:20:16 GMT
+    </p>
+  </body>
+</html>

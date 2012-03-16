@@ -1,0 +1,231 @@
+5.3 > 5.3a <19 December 2010>
+  1) Added "crdfam.clamav.hdb" to "sanesecurity" list.
+  2) Added "--quiet" to the rsync flags.
+  3) Disabled loading of colored flags run via CRON.
+  4) Removed useless version test that was not working anyway.
+  5) Colorized a few more items
+
+5.2j > 5.3 Released: <14 November 2010>
+
+  1) Corrected logic error in command line options.
+
+  2) Optimized several routines to improve performance.
+
+  3) Due to the way certain definition files were constructed, it required that
+     a new test file be used to test the integrity of the newly downloaded
+     definition files.
+
+  4) Started implementation of "color" codes to display certain output in
+     color(s). Only partly functional.
+
+  5) Added BSD License.
+
+  6) Corrected logic problem with securite files not being properly deleted
+
+  7) Changed "mv" to "cp" when transferring securite files between directories.
+     This now makes the "download if newer" cURL and wget option work correctly.
+
+  8) Added "MSRBL" files to "KILL_FILES" variable
+
+  9) added "winnow_extended_malware.hdb and winnow_extended_malware_links.hdb
+     to the "winnow" definition files.
+
+  10) Removed an old "vx.hdb" file that was no longer available.
+
+  11) Removed deprecated declarations and variables from script.
+
+  12) Updated the README file.
+
+5.2i > 5.2j
+
+  1) Removed debug information that could stop the script from running.
+
+5.2h > 5.2i
+
+  1) Added new "D" option. It will delete all existing definition
+     and configuration files.
+
+  2) Added new databases from "securiteinfo". Old securiteinfo databases are
+     removed
+
+  3) Added variable to scamp config file to check if it is usable with new
+     scamp versions.
+
+  4) Added warning that MSRBL database files are no longer being maintained.
+
+  5) Added new function to validate configuration input. It will help to
+     eliminate input errors during configuration.
+
+  6) Fixed bug that was preventing "sigwhitelist.ign2" from loading.
+
+5.2g > 5.2h
+
+  1) Added the following databases:
+
+  New Database from OITC:
+
+  Database name: winnow.attachments.hdb
+  Description: Spammed attachments
+  FP Risk: Low
+
+  New Database from Sanesecurity:
+
+  Database name: spamattach.hdb
+  Description: Spammed attachments such as pdf/doc/rtf/zips
+  FP Risk: Low
+
+  ** New Whitelist file for ClamAV 0.96rc1+ users ONLY **
+
+  Filename: sigwhitelist.ign2
+  Description:  This file will enable a fast update to whitelist any problem
+  signatures that are distributed, until the producer of the signature can
+  fix the problem.
+
+  2) Corrected problem with Securite files not being properly deleted
+	Bug-Report: 2979369
+
+5.2f > 5.2g
+
+  1) Added the following databases:
+   doppelstern.hdb
+   doppelstern.ndb
+  2)Renamed "SIG_DB" > "CLAMAV_DB"
+
+
+5.2e > 5.2f
+
+  1) Correct minor problem with path setting for config file
+
+5.2d > 5.2e
+
+  1) Added the following new signature files and associated 'sig' files:
+    a) INetMsg-SpamDomains-2m.ndb
+    b) winnow.complex.patterns.ldb
+    c) spearl.ndb
+    d) scamnailer.ndb
+
+5.2c > 5.2d
+
+  1) Fixed bug that caused some winnow files not to be removed correctly.
+
+5.2b > 5.2c
+
+  1) Slightly modified some dialog output.
+  2) Added winnow_malware_links.ndb to database
+  3) Added jurlbla.ndb to database
+  4) Modified "chown" to use the ${C_USER}:${C_GROUP} variable for the
+     sane_include.txt file.
+  5) Updated Malware URL
+  6) Modified routine to delete unused definition files
+  7) There are now three options for the 'winnow' files
+  8) Corrected path for 'sane_include.txt' file
+
+5.2a > 5.2b
+
+  1) New databases added to the script
+
+5.2 > 5.2a
+
+  1) Added more error checking to configuration input
+  2) Corrected potential problem if ~/.gnupg does not exist
+  3) Consolidated more variables into the $GPG_OPT variables
+  4) Moved config files into separate directory. Each file can be modified
+     separately.
+  5) Removed: NEW_CONFIG_VER as it is now depreciated.
+  6) Rewrote function to parse the config file.
+  7) Changed the ordering of the config files for easier reading.
+  8) Now supports the [-e] command line option to edit an existing config
+     file.
+  9) Added 'getopts' support to make parsing the command line easier.
+
+5.1 > 5.2
+
+  1) Changed the rsync 'r' flad to 'd' to prevent recursion.
+  2) Added options to download the 'winnow' files.
+  3) Added addition error checking when changing directories.
+  4) Added routine to delete the 'winnow' files if they are not to be
+     installed
+  5) rsync now uses an 'include' file for downloading Sanesecurity files.
+
+5.0.5f > 5.1
+
+  1) Added multiple config sections to config file. (see README)
+  2) Added option to set the tmp directory
+  3) Added option to set the GNUPGHOME environment variable. (see man gpg)
+  4) Added option to choose log file name - time based or static.
+  5) Added new [-C] option to either create/use a specific configuration.
+  6) Added additional warning before deleting the config file.
+  7) Added additional checks to see if running via CRON.
+  8) Added a "clean tmp' function to insure the tmp directory is empty.
+  9) Corrected bug with the option to install 'Securiteinfo' files.
+ 10) Added the ability to use the system logger
+ 11) Now removes files from the Clamav DB if downloading turned off.
+ 12) Modified the log file format
+ 13) Randomized the file name used to pipe information to logger (security)
+ 14) Fixed logic bug in selecting log naming format.
+
+5.0.5e > 5.0.5f
+
+  1) Replaced <which> with <command -v> to make the script more portable.
+     See: http://mywiki.wooledge.org/BashFAQ/081 for further details.
+  2) Replaced depreciated ">/dev/null 2>&1" with "&>/dev/null"
+  3) Added ;; to last statement in <case> statements for uniformity.
+  4) Optimized the "assign_value" function.
+  5) Removed <clear> statements and replaced with <printf "\f"> statement
+  6) Removed some <echo> statements and replaced with <printf> statements.
+  7) Restored the $(<command>) syntax. Problem with Bash-4 was resolved.
+  8) Modified the input screen for the Clamav PID file for clarity.
+  9) Removed the 'chg_owner' function since it was redundant
+ 10) Removed the 'chmod' statement from top of 'check_install' function
+     since it was redundant
+ 11) Optimised 'log' function by moving the 'chmod' and chown' statements.
+
+5.0.5d > 5.0.5e
+
+  1) Changed" $(command) to `command` syntax. For some unknown reason, the
+     $(<command>) syntax is failing under Bash-4.0 on FreeBSD. I am
+     investigating it.
+  2) Modified the logic to download the *.ldb files from Sanesecurity
+
+5.0.5c > 5.0.5d
+
+  1) Added '--compress' (-c) to the rsync flags. Removed the '--update'
+     (-u) flag
+  2) Added '--show-error' (-S) to the curl flags. This will enable error
+     output from curl if something goes wrong.
+  3) Modified the error handling routines
+
+5.0.5b > 5.0.5c
+
+  1) Added --exclude *.sha256 --exclude *.txt to the rsync download command
+     to prevent rsync from downloading the Sanesecurity *.sha256 and txt
+     files.
+  2) Minor changes to some of the program output. (Cleaned it up)
+  3) Removed obsolete ${F_SUM} variable
+  4) Enhanced the error handling routine for downloaded files
+  5) Removed obsolete "declare -a DL_ERROR" statement
+
+5.0.5a > 5.0.5b
+
+  1) Removed some old code
+  2) Added '-z' to rsync command line to allow compression
+  3) Modified the logging function. A separate log file is now created
+     based on the year & month. (EXAMPLE: scamp-09-03.log)
+  4) Removed the [-d] command line option. It was never implemented
+     anyway
+
+5.0.5 > 5.0.4a
+
+  1) Bug fix for CentOS (logging)
+  2) Updated script variables
+  3) Modified the Malware download file
+
+5.0.0 > 5.0.5
+
+  1) Various bug fixes and modifications. Actual scripts only released
+     internally
+
+5.0.0
+
+  1) Complete rewrite of the original scamp.sh script
+  2) Added support for new Sanesecurity signatures

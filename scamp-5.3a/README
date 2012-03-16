@@ -1,0 +1,408 @@
+IMPORTANT: FreeBSD users who install this program from the ports system
+should read the 'FreeBSD Note' at the end of this document.
+
+******************************** IMPORTANT ********************************
+IMPORTANT:  This is a "bash" script. It will probably fail if used under
+            another shell.
+
+If this is an update from an earlier version of this script, it is strongly
+that this script be run with the [-c] command line option to insure it is
+configured correctly. In additon, any existing configuration files should
+either be rebuilt using the "-e <name>" option or deleted and recreated.
+
+The first time this script is initialised, it will run its basic
+configuration routine and exit. If you ever want to reconfigure the script,
+use the [-c] command line option to erase and create a default config file.
+Use [-C <name>] to create a new config section (after the default is created).
+***************************************************************************
+REQUIRED FILES:
+
+This script was written using <Bash-4.1.9>. While it may work correctly with
+other scripting languages, there is no guarantee that it will.
+
+1. Curl or Wget {curl >= 7.21.2 recommended} {wget >= 1.12 recommended}
+   a. http://curl.haxx.se/
+   b. http://www.gnu.org/software/wget/
+2. rsync {Version >= 3.0.7 recommended}
+   a. http://samba.anu.edu.au/rsync/
+3. gnupg {Version >= 2.0.16 recommended}
+   a. http://lists.gnupg.org/pipermail/gnupg-announce/2009q1/000287.html
+   b. http://www.gnupg.org/
+4. clamav {Version >= 0.96 recommended}
+   a. http://www.clamav.net/
+
+1. This script probably has to be run as ROOT or another privileged user
+who has proper READ/WRITE permissions to the "/etc" directory as well as
+the Clamav database.
+
+2. This script has an interactive configuration function. You must run it
+from the console the first time you invoke it. After that, it will work
+fine from CRON.
+
+3. The [-C] option will create a new configuration for use by the script.
+Use it from the command line. EXAMPLE: scamp.sh -C <filename>
+
+4. The [-e] option will edit an existing config file. The file must be
+   stated on the command line: scamp.sh -e <filename>
+
+Filename is what you want to call the new config file. Use only letters,
+numbers and underscores. No special characters allowed. If the section does
+not exist, it will be created. The config-script will ask the same
+questions as when you first installed the script. When finished, it will
+exit. To use your new config section, just call it from the command line
+like you did when you created it. It will use the configuration file named.
+You should NOT give the confiruration file a 'prefix'. It is not required.
+
+REMEMBER: The name is case sensitive!
+
+5. The "scamp.sh" file is a BASH script for downloading and installing
+various Clamav definition files. The script will create a "CONFIGURATION
+FILE" when first run. The majority of the variables are 'hard coded' into
+the script. The only one that must be entered is the location of the
+Clamav database. See your "clamd.conf" file for the correct location.
+
+6. Examples are:
+   a. /var/db/clamav
+   b. /var/lib/clamav
+   c. /usr/local/share/clamav
+
+7. You must enter the correct location or else the script will not work.
+The initialization will only occur the first time the script is run
+or when invoked by a command line options [-c].
+
+COMMAND LINE OPTION:
+
+{-c} = Creates a new default config file and exits
+{-C <filename>} = Create a new config file section
+{-D} = Delete existing definition and configuration files.
+{-e <filename>} = Edit an existing config file
+{-h} = Usage screen.
+{-l} = Turns off the logging function
+{-L} = Turns on the logging function
+{-q} = Turns off printing of a summary screen (Error messages displayed)
+{-Q} = Turns on printing of a summary screen displayed}.
+{-r} = Turns off the sleep function.
+{-R} = Turns on the random sleep timer. Between 0 & 9 minutes
+{-v} = Displays the script version and exits.
+
+When available, lower case letter will turn an option off, while upper
+case will activate the function. Presently, only the 'log' and 'summary
+screen' and 'random download timer' functions are supported. They can be
+set permanently in the config file.
+
+NOTE: "Random Download Timer"
+
+The random download function is only useful when the script is run via
+CRON. It is ignored at other times. The function can be invoked via the
+command line using [-R]; i.e., "scamp.sh -R" for instance. You can save
+the setting permanently in the config file by running the script with the
+[-c] command line option and then answering the random download question
+with either 1 or 0 - 0=off & 1=on.
+
+EXIT CODES:
+
+The following exit code values are available:
+
+  0 Success
+  1 Incorrect flag entered
+  2 No database specified
+  3 Unable to create required directory structure
+  4 Program must be run interactively
+  5 Unable to locate "which" binary
+  6 Missing binary: View error message for details
+  7 Error creating GPG file
+
+INSTALLATION NOTES:
+
+1. All of the Sanesecurity files and gpg keys are now keep in the
+Sanesecurity (sane) directory.
+
+2. For the safest and most error free operation, I would recommend
+cleaning out the clamav database directory of all files and directories
+not installed by the 'freshclam' program itself. This appears to be even
+more important if you have been running another script to update the
+clamav database.
+
+Using the [-D] command line flag works fine for files installed using then
+'scamp.sh' script. It is not guaranteed, and probably will not work, for files
+installed by other scripts.
+
+3. That would probably include all BUT these files:
+   a. daily.cld
+   b. main.cld
+   c. mirrors.dat
+   d. stats.dat
+
+4. Any directories should also be deleted.
+
+5. Running the script for the first time after cleaning out the clamav
+database will insure a cleaner install of the new database files. Since
+it appears that different 'scripts' install a radically different
+configuration of definition files, this would also insure that only the
+ones installed by this script are made available to Clamav. It would also
+insure that outdated files are removed.
+
+DOWNLOADED FILES:
+
+The actual files download and installed by this script include the
+following.
+
+1. All of the Sanesecurity files
+junk.ndb                           General high hitting junk, containing spam/
+                                   phishing/lottery/jobs/419s etc.
+
+jurlbl.ndb                         Junk Url based
+
+jurlbla.ndb                        Junk Url based autogenerated from various
+                                   feeds
+
+lott.ndb                           Lottery
+
+phish.ndb                          Phishing
+
+rogue.hdb                          Malware, Rogue anti-virus software and Fake
+                                   codecs etc.
+
+sanesecurity.ftm                   Message file types (REQUIRED for best
+                                   performance)
+
+sigwhitelist.ign2                  Fast update file to whitelist any problem
+                                   signatures (REQUIRED 0.96rc1+)
+
+scam.ndb                           Spam/scams
+
+spam.ldb                           Spam detected using the new Logical Signature
+                                   type
+
+spamimg.hdb                        Spam images
+
+spamattach.hdb                     Spam Spammed attachments such as pdf's/docs/
+                                   rtf/zips
+
+spear.ndb                          Spear phishing email addresses (autogenerated
+                                   from data here)
+
+spearl.ndb                         Spear phishing urls (autogenerated from data
+                                   here)
+
+
+2) Sanesecurity *.ldb files
+spam.ldb                           Spam detected using the new Logical Signature
+                                   type
+
+3) The following databases are distributed by Sanecurity, but produced by OITC
+winnow.attachments.hdb             Spammed attachments such as pdf's/docs/
+                                   rtf/zips
+
+
+winnow.attachments.hdb             Signatures to detect images and other
+                                   attachments in active spam runs
+           (False positive rate is low)
+
+winnow.complex.patterns.ldb        Hand created signatures to detect fraud and
+                                   other malicious spam.
+           (Very low false positive rate)
+
+winnow_extended_malware.hdb        Signatures to detect malware on your file
+                                   system. This contains both older signatures
+           not incorporated in official clamav databases
+           or are large files not transported typically
+           via email(Should not be used directly by
+           mailservers as it just increases load with
+           little return on investment)
+
+winnow_extended_malware_links.ndb  Signatures to detect active url's associated
+                                   with malware in winnow_extended_malware.hdb.
+           This contains both older signatures not
+           incorporated in official clamav databases or
+           are large files not transported typically via
+           email(Might be used in mail systems. Very low
+           false alarm rate)
+
+
+winnow_malware.hdb                 Current virus, trojan and other malware not
+                                   yet detected by ClamAV.
+
+winnow_malware_links.ndb           Signatures to detect links to malware in
+                                   winnow_malware.hdb and links to other
+           malicious malware. (Scoring is not required
+           on these signatures)
+
+winnow_phish_complete.ndb          Signatures to detect phishing and other
+                                   malicious url's and compromised hosts. This
+           collection of signatures are derived by
+           checking many data feeds (see below) coupled
+           with special processing to remove the
+           possibility of false positives. (Recommended
+           to be used with scoring)
+
+winnow_phish_complete_url.ndb      Similar to winnow_phish_complete.ndb except
+                                   that entire urls's are used to derive the
+           signatures rather than carefully selected
+           hosts. (Conservative) Be advised that by
+           using these complete url signatures, fast
+           flux phishing sites as well as phishing sites
+           that use obfuscated urls and those that
+           insert trash in urls to confuse anti-malware
+           systems may not be reliably detected by some
+           of these signatures (Conservative and can be
+           used without scoring).
+
+winnow_spam_complete.ndb           Signatures to detect fraud and other
+                                   malicious spam. This collection of signatures
+           are derived using special processing on data
+           sent to spam traps and honeypots. (Scoring of
+           these signatures is recommended)
+
+Note: Only use ONE of the above databases, winnow_phish_complete.ndb
+or winnow_phish_complete_url.ndb
+
+NOTE: Please report any problems with winnow sigs to winnow@oitc.com
+
+4) The following databases are distributed by Sanecurity, but
+   produced by Andrew Lewis
+
+doppelstern.ndb                    phishing, scams and other junk
+doppelstern.hdb                    hashes of spam documents and images
+
+
+5. The following databases are produced and distributed by SecuriteInfo
+honeynet.hdb
+securiteinfobat.hdb
+securiteinfodos.hdb
+securiteinfoelf.hdb
+securiteinfo.hdb
+securiteinfohtml.hdb
+securiteinfooffice.hdb
+securiteinfopdf.hdb
+securiteinfosh.hdb
+
+6) The following databases are produced and distributed by MSRBL
+MSRBL-SPAM.ndb                     created from spam emails (URLs or other
+                                   content) that looks static
+
+MSRBL-Images.hdb                   created from images contained within
+                                   spam emails
+
+MSRBL-SPAM-CR.ndb
+
+7) The following databases are produced and distributed by MalwarePatrol
+mbl.ndb                            URLs containing of Viruses, Trojans,
+                                   Worms, or Malware Low
+
+7. The following databases are distributed by Sanecurity, but produced by Bill
+   Landry (InetMsg)
+
+INetMsg-SpamDomains-2w.ndb         last 2 'weeks' of spam domains found
+
+INetMsg-SpamDomains-2m.ndb         last 2 'months' of spam domains found Med
+
+Note: Only use ONE of the above databases, SpamDomains-2w.ndb
+or SpamDomains-2m.ndb
+
+8) The following databases are distributed by Sanecurity, but produced by
+   Julian Field
+
+scamnailer.ndb                     Spear phishing and other phishing emails
+
+
+This script is easily run via CRON. Something like this is all that you
+probably need. You should probably include a "MAILTO" in the crontab
+file. Any errors will be mailed to that address. If not all ready set, or
+if you do not know how to set it, at the command line enter: "whoami"
+sans quotes and enter that in the mailto variable.
+
+EXAMBLE: Output of 'whoami' was steve. Place this in the top of the cron
+file:
+
+   MAILTO=steve
+
+This would be placed just below the 'SHELL' variable. You can get further
+information at <http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5>
+
+# Root's Crontab file
+# Use the fully qualified path to bash on your system.
+# Typing: "which bash" will produce it.
+# SHELL=/usr/local/bin/bash   # For FreeBSD users
+# SHELL=/usr/bin/bash         # Most other operating systems
+# Enter user below and uncomment
+# MAILTO=
+#(m)  (h) (mday)  (month) (wday)  (command) ## Do NOT uncomment
+
+# Runs every 1 hours, every day with logging=on, quiet mode=on, random
+# download timer=on
+
+0     */1   *   *     *     /PATH-2-SCRIPT/scamp.sh -L -q -R
+
+# Runs every 1 hours, every day using a preconfigured config file name: cron
+
+0     */1   *   *     *     /PATH-2-SCRIPT/scamp.sh -C cron
+
+EULA:
+
+The end user is allowed to make any changes, modifications, or whatever
+to this script. The author assumes no responsibility for this script,
+modified or not by the end user. In other words, the user assumes all
+responsibility for the use of this program. In other words, USE AT YOU
+OWN RISK.
+
+I can be contacted at: gerard@seibercom.net
+
+The latest version of this script can usually be downloaded from:
+
+      https://sourceforge.net/projects/scamp/
+
+Older versions may also be available.
+
+Any questions, suggestions, patches, etc. should be directed to me. I
+really would appreciate it. To make tracking of 'bug' reprts easier, please
+do the following:
+
+1) Go to: https://sourceforge.net/projects/scamp/
+2) Click on "TRACKER"
+3) Click on "Bug Reports"
+4) Click on "Add New"
+5) Fill out the report with complete information including the version of
+   the script you are using, your OS and version of bash, rsync, gpg/gpg2,
+   curl and/or wget and your version of Clamav. If possible, include the
+   complete text of any error messages, etc.
+
+Use the same procedure to submit suggestions. Click on "Feature Request"
+under "TRACKER"
+
+FreeBSD Note:
+
+When installed via the FreeBSD ports system, a configuration file with
+the basic defaults for Clamav on a FreeBSD system is installed in the
+'/usr/local/etc/scamp' directory. It is still strongly recommended that the
+first time this script is run, it is run as "scamp.sh -c" to insure the
+file is configured according to the end users preferences.
+
+COPYRIGHT
+
+Copyright (c) <2010>, <GERARD SEIBERT>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+LAST UPDATED: Sun, 19 December 2010 11:20:16 GMT

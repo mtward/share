@@ -1,0 +1,32 @@
+INSTALL
+
+1. Place the "scamp.sh" script in a directory available in the PATH
+   setting.
+
+2. Change the file permissions: "chmod 0755 scamp.sh" or whatever is
+   acceptable for your system
+
+3. The first time the program is run, it needs to create a "config"
+   file. Either run the program from the console or use the [-c] command
+   line option to force building a new "config" file.
+
+4. This script is probably best used via CRON. Running every 4 hours
+   is probably sufficient.
+
+5. When run via CRON, using the "-R -L -q" options will provide a log
+   file, random download intervals and suppress superfluous emails from
+   CRON regarding the script's progress. Error messages will still be
+   supplied, however.
+
+6. PLEASE read the "README" file prior to actually running this
+   script. It contains important information.
+
+
+NOTE: FreeBSD Users
+
+If installed via the FreeBSD ports system, a preconfigured "config"
+has been created: "/usr/local/etc/scamp/default". While this is
+sufficient for most users, it is still strongly recommended that the
+user run the script with the [-c] command line option the first time
+this script is started. This will insure a custom config file suited
+to the end users specifications.

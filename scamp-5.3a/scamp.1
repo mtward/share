@@ -1,0 +1,83 @@
+.\# This is the scamp,sh 5.3a man file
+.\# To test view use: nroff -e -mandoc scamp.1 | less -s
+
+.TH SCAMP 1 "Sun, 19 December 2010" "version 5.3a" "USER COMMANDS"
+.SH NAME
+scamp \- A bash script to download and install third party definition signatures for Clamav.
+.SH SYNOPSIS
+.B scamp.sh
+[-c|-C <name>][-D][-e <name>][-h|-v][-l|-L][-q|-Q][-r|-R]
+.SH DESCRIPTION
+Scamp automates the download and installation of third party definition files for \fBClamav\fP. It offers the ability to create and use many different configuration files. It is easy to run via the console or CRON.
+.P
+By using third party suplimental definition files in conjunction with the \fBClamav\fP supplied files, a user's system can be secured more effectively.
+.SH COMMAND LINE OPTIONS
+ -c = Creates a new default config file and exits
+ -C <name> = Create a new config file or use an existing one.
+ -D = Delete all existing definition and config files
+ -e <name> = Edit an existing config file
+ -h = Usage screen.
+ -l = Turns off the logging function
+ -L = Turns on the logging function
+ -q = Turns off printing of a summary screen
+      Error messages displayed however.
+ -Q = Turns on printing of a summary screen.
+ -r = Turns off the random downloat timer sleep function.
+ -R = Turns on the random download sleep timer. Between 0 & 9 minutes
+ -v = Displays the script version and exits.
+.SH FILES
+All of the scripts configuration files are keep in a dedicated
+.br
+directory. Usually: "/etc/scamp" or "/usr/local/etc/scamp" (FreeBSD)
+.br
+The following applications are required to be available for this script to run:
+
+  1) \fBclamav\fP
+  2) \fBgpg\fP or \fBgpg2\fP
+  3) \fBrsync\fP
+  4) \fBwget or curl\fP
+.SH EXAMPLES
+.TP
+Create the default config file:
+
+.B scamp.sh -c
+.TP
+Create a config file named: \fBfoo\fP or use it if it all ready exists:
+
+.B scamp.sh -C
+.I foo
+.TP
+Edit an existing connfig file with option to create it if it does not all ready exist:
+
+.B scamp.sh -e
+.I foo
+.SH EXIT STATUS
+scamp.sh will exit with 0 upon success.
+.SS
+The following exit code values are available:
+.PP
+ 0 Success
+ 1 Incorrect flag entered
+ 2 No database specified
+ 3 Unable to create required directory structure
+ 4 Program must be run interactively
+ 5 Unable to locate "which" binary
+ 6 Missing binary: View error message for details
+ 7 Error creating GPG file
+
+.SH BUGS
+
+Report all BUGS via the scripts web site:
+
+.BR https://sourceforge.net/projects/scamp
+
+.SH AUTHOR
+Gerard Seibert <gerard (at) seibercom.net>
+.SH SEE ALSO
+.BR bash(1)
+.BR clamd(8)
+.BR curl(1)
+.BR freshclam(1)
+.BR gpg(1)
+.BR gpg2(1)
+.BR wget(1)
